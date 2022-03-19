@@ -1,5 +1,7 @@
 import random
+
 from src import coder
+
 
 def generate_data(count):
     data = []
@@ -11,8 +13,8 @@ def generate_data(count):
 
 
 def run():
-  packets = coder.create_packet(generate_data(256), 8)
-  j = 0
-  for packet in packets:
-    print(f"{j}. {packet}")
-    j += 1
+    packets = coder.create_packet(generate_data(256), 8)
+    j = 0
+    for packet in packets:
+        print(f"{j}. {packet}")
+        j += 1
