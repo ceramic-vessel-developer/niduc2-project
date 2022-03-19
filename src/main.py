@@ -2,12 +2,13 @@ import random
 
 
 def generate_data(count):
-  data = []
+    data = []
 
-  for i in range(count):
-    data.append(random.randint(0, 1))
+    for i in range(count):
+        data.append(random.randint(0, 1))
 
-  return data
+    return data
+
 
 def run():
-  print('hello world')
+    print('hello world')
