@@ -44,7 +44,7 @@ def run():
     error = False
     while True:
       encoded_packet = parity_bits.parity_encoder(copy.copy(packet))
-      sent_packet = channel.binary_earsure_channel(encoded_packet, 0.05)
+      sent_packet = channel.binary_erasure_channel(encoded_packet, 0.05)
       response = parity_bits.parity_decoder(sent_packet)
       if response == 'R':
         break

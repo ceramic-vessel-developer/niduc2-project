@@ -10,7 +10,7 @@ def symetric_binary_channel(packet, p):
         packet[i] = 1
   return packet
 
-def binary_earsure_channel(packet, p):
+def binary_erasure_channel(packet, p):
   indexes=[]
   for i in range(len(packet)):
     if random.uniform(0, 1) <= p:
