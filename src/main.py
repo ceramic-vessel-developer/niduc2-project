@@ -59,6 +59,7 @@ def run():
     packets = create_packet(generate_data(256), 8)
 
     print_packets(packets)
+    print('')
 
     processed_packets = []
 
@@ -69,20 +70,24 @@ def run():
         'repeated': [0, 0, 0, 0, 0]
     }
 
+    codings = ['crc', 'parity_bit']
+
     distortions = ['binary_erasure_channel', 'symetric_binary_channel']
 
     probability = 0.05
 
-    for distortion in distortions:
-        print(f'Using channel: ', distortion, end='\n\n')
+    for coding in codings:
+        for distortion in distortions:
+            print(f'Using algorithm: ', coding)
+            print(f'Using channel: ', distortion, end='\n\n')
 
-        processed_packets, statistics = processor.process_packets(
-            packets, distortion, probability)
+            processed_packets, statistics = processor.process_packets(
+                packets, coding, distortion, probability)
 
-        print_statistics(statistics)
+            print_statistics(statistics)
 
-        print("Printing processed packets:")
+            print("Printing processed packets:")
 
-        print_processed_packets(packets, processed_packets)
+            print_processed_packets(packets, processed_packets)
 
-        print('')
+            print('')

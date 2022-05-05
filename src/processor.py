@@ -1,9 +1,9 @@
 import copy
 
-from src import parity_bits, channel
+from src import channel, crc, parity_bits
 
 
-def process_packets(packets, distortion, probability):
+def process_packets(packets, coding, distortion, probability):
     # Simulating process of sending packets in stop and wait ARQ
 
     processed_packets = []
@@ -20,8 +20,15 @@ def process_packets(packets, distortion, probability):
         not_found = False
         repeated = 0
 
+        encoded_packet = []
+        sent_packet = []
+        response = ''
+
         while True:
-            encoded_packet = parity_bits.parity_encoder(copy.copy(packet))
+            if coding == 'crc':
+                encoded_packet = crc.crc_encoder(copy.copy(packet), 3)
+            elif coding == 'parity_bit':
+                encoded_packet = parity_bits.parity_encoder(copy.copy(packet))
 
             if distortion == 'binary_erasure_channel':
                 sent_packet = channel.binary_erasure_channel(
@@ -30,12 +37,13 @@ def process_packets(packets, distortion, probability):
                 sent_packet = channel.symetric_binary_channel(
                     encoded_packet, probability)
 
-            response = parity_bits.parity_decoder(sent_packet)
+            if coding == 'crc':
+                decoded_packet, response = crc.crc_decoder(sent_packet, 3)
+            elif coding == 'parity_bit':
+                response = parity_bits.parity_decoder(sent_packet)
 
             if response == 'R':
-                print('response R, ', encoded_packet, sent_packet)
                 if encoded_packet != sent_packet:
-                    print('something found')
                     not_found = True
 
                 break
