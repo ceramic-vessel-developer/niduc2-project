@@ -52,7 +52,7 @@ def print_statistics(statistics):
     for i in range(4):
         print(f"Repeated {i + 1} times: ", statistics['repeated'][i])
 
-    print(f"Repeated more times: ", statistics['repeated'][4])
+    print(f"Repeated more times: ", statistics['repeated'][4], end='\n\n')
 
 
 def run():
@@ -69,10 +69,20 @@ def run():
         'repeated': [0, 0, 0, 0, 0]
     }
 
-    processed_packets, statistics = processor.process_packets(packets)
+    distortions = ['binary_erasure_channel', 'symetric_binary_channel']
 
-    print_statistics(statistics)
+    probability = 0.05
 
-    print("Printing processed packets:")
+    for distortion in distortions:
+        print(f'Using channel: ', distortion, end='\n\n')
 
-    print_processed_packets(packets, processed_packets)
+        processed_packets, statistics = processor.process_packets(
+            packets, distortion, probability)
+
+        print_statistics(statistics)
+
+        print("Printing processed packets:")
+
+        print_processed_packets(packets, processed_packets)
+
+        print('')

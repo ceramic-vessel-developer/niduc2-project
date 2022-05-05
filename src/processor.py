@@ -3,7 +3,7 @@ import copy
 from src import parity_bits, channel
 
 
-def process_packets(packets):
+def process_packets(packets, distortion, probability):
     # Simulating process of sending packets in stop and wait ARQ
 
     processed_packets = []
@@ -22,11 +22,20 @@ def process_packets(packets):
 
         while True:
             encoded_packet = parity_bits.parity_encoder(copy.copy(packet))
-            sent_packet = channel.binary_erasure_channel(encoded_packet, 0.05)
+
+            if distortion == 'binary_erasure_channel':
+                sent_packet = channel.binary_erasure_channel(
+                    encoded_packet, probability)
+            elif distortion == 'symetric_binary_channel':
+                sent_packet = channel.symetric_binary_channel(
+                    encoded_packet, probability)
+
             response = parity_bits.parity_decoder(sent_packet)
 
             if response == 'R':
+                print('response R, ', encoded_packet, sent_packet)
                 if encoded_packet != sent_packet:
+                    print('something found')
                     not_found = True
 
                 break
