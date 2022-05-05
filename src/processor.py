@@ -34,7 +34,7 @@ def process_packets(packets, coding, distortion, probability):
                 sent_packet = channel.binary_erasure_channel(
                     encoded_packet, probability)
             elif distortion == 'symmetric_binary_channel':
-                sent_packet = channel.symmetric_binary_channel(
+                sent_packet = channel.symetric_binary_channel(
                     encoded_packet, probability)
 
             if coding == 'crc':
