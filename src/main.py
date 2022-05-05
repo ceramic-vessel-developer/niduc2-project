@@ -1,6 +1,5 @@
 import copy
 import random
-import re
 
 from src import parity_bits, channel
 
