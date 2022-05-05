@@ -72,7 +72,7 @@ def run():
 
     codings = ['crc', 'parity_bit']
 
-    distortions = ['binary_erasure_channel', 'symetric_binary_channel']
+    distortions = ['binary_erasure_channel', 'symmetric_binary_channel']
 
     probability = 0.05
 
