@@ -28,6 +28,10 @@ def parity_encoder(packet):
 def parity_decoder(packet):
     sum = 0
 
+    # we assume empty packet as an error
+    if not packet:
+        return 'F'
+
     for bit in packet[:-1]:
         sum += bit
 
