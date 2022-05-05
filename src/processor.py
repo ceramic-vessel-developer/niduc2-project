@@ -8,11 +8,16 @@ def process_packets(packets):
 
     processed_packets = []
 
-    statistics = {'first_time_good': 0,
-                  'wrong': 0, 'repeated': [0, 0, 0, 0, 0], 'not_found': 0}
+    statistics = {
+        'first_time_good': 0,
+        'wrong': 0,
+        'not_found': 0,
+        'repeated': [0, 0, 0, 0, 0]
+    }
 
     for packet in packets:
         error = False
+        not_found = False
         repeated = 0
 
         while True:
@@ -21,6 +26,9 @@ def process_packets(packets):
             response = parity_bits.parity_decoder(sent_packet)
 
             if response == 'R':
+                if encoded_packet != sent_packet:
+                    not_found = True
+
                 break
             else:
                 error = True
@@ -35,5 +43,8 @@ def process_packets(packets):
             statistics['wrong'] += 1
         else:
             statistics['first_time_good'] += 1
+
+        if not_found:
+            statistics['not_found'] += 1
 
     return processed_packets, statistics

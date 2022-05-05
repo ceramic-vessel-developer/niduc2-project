@@ -47,6 +47,7 @@ def print_processed_packets(packets, processed_packets):
 def print_statistics(statistics):
     print("First time good: ", statistics['first_time_good'])
     print("Wrong: ", statistics['wrong'])
+    print("Not found: ", statistics['not_found'])
 
     for i in range(4):
         print(f"Repeated {i + 1} times: ", statistics['repeated'][i])
@@ -61,8 +62,12 @@ def run():
 
     processed_packets = []
 
-    statistics = {'first_time_good': 0,
-                  'wrong': 0, 'repeated': [0, 0, 0, 0, 0], 'not_found': 0}
+    statistics = {
+        'first_time_good': 0,
+        'wrong': 0,
+        'not_found': 0,
+        'repeated': [0, 0, 0, 0, 0]
+    }
 
     processed_packets, statistics = processor.process_packets(packets)
 
