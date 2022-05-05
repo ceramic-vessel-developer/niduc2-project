@@ -9,11 +9,17 @@ Simulator with implemented ARQ algorithms to test network connectivity problems
 $ ./niduc.py
 ```
 
+## Used algorithms
+* Coding algorithms:
+  * CRC
+  * Parity bit
+* Distortion algorithms:
+  * Binary erasure channel
+  * Symmetric binary channel
+
 ## Used technology
 * Python
-* Komm
 * NumPy
-* SciPy
 
 ## Authors
 Michał Korczak
