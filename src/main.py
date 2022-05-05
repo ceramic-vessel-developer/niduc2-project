@@ -1,5 +1,6 @@
 import copy
 import random
+import re
 
 from src import parity_bits, channel
 
@@ -30,6 +31,14 @@ def create_packet(data, packet_size):
 
     return packets
 
+def print_statistics(statistics):
+    print("First time good: ", statistics['first_time_good'])
+    print("Wrong: ", statistics['wrong'])
+
+    for i in range(4):
+      print(f"Repeated {i + 1} times: ", statistics['repeated'][i])
+
+    print(f"Repeated more times: ", statistics['repeated'][4])
 
 def run():
     packets = create_packet(generate_data(256), 8)
@@ -41,11 +50,12 @@ def run():
         j += 1
 
     processed_packets = []
-    statistics = {'first_time_good': 0, 'wrong': 0, 'repeated': 0}
+    statistics = {'first_time_good': 0, 'wrong': 0, 'repeated': [0, 0, 0, 0, 0]}
 
     # Simulating process of sending packets in stop and wait ARQ
     for packet in packets:
         error = False
+        repeated = 0
 
         while True:
             encoded_packet = parity_bits.parity_encoder(copy.copy(packet))
@@ -56,18 +66,20 @@ def run():
                 break
             else:
                 error = True
-                statistics['repeated'] += 1
+                repeated += 1
 
         processed_packets.append(sent_packet)
+
+        if (repeated > 0) and (repeated <= 5):
+          statistics['repeated'][repeated - 1] += 1
 
         if error:
             statistics['wrong'] += 1
         else:
             statistics['first_time_good'] += 1
 
-    print("First time good: ", statistics['first_time_good'])
-    print("Wrong: ", statistics['wrong'])
-    print("Repeated: ", statistics['repeated'])
+    print_statistics(statistics)
+
     print("Printing processed packets:")
 
     for i in range(len(processed_packets)):
