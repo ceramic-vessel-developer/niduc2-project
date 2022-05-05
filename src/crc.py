@@ -56,8 +56,6 @@ def crc_decoder(packet, n):
     if sum == 0:
         return packet[:-(divisor_length - 1)], 'R'
     elif sum == 1:
-        new_packet = packet[:-(divisor_length - 1)]
-
-        return new_packet, 'F'
+        return packet[:-(divisor_length - 1)], 'F'
     else:
         return [], 'R'
