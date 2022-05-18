@@ -1,6 +1,7 @@
 import random
 
 from src import processor
+from src import data
 
 
 def generate_data(count):
@@ -50,14 +51,14 @@ def print_processed_packets(packets, processed_packets, coding):
 
 
 def print_statistics(statistics):
-  print("First time good: ", statistics['first_time_good'])
-  print("Wrong: ", statistics['wrong'])
-  print("Not found: ", statistics['not_found'])
+  print("First time good: ", statistics['first_time_good'][0])
+  print("Wrong: ", statistics['wrong'][0])
+  print("Not found: ", statistics['not_found'][0])
 
   for i in range(4):
-    print(f"Repeated {i + 1} times: ", statistics['repeated'][i])
+    print(f"Repeated {i + 1} times: ", statistics['repeated'][0][i])
 
-  print(f"Repeated more times: ", statistics['repeated'][4], end='\n\n')
+  print(f"Repeated more times: ", statistics['repeated'][0][4], end='\n\n')
 
 
 def run():
@@ -83,13 +84,15 @@ def run():
 
   for coding in codings:
     for distortion in distortions:
+      filename=coding+distortion+str(probability)+".csv"
       print(f'Using algorithm: ', coding)
       print(f'Using channel: ', distortion, end='\n\n')
 
       processed_packets, statistics = processor.process_packets(
         packets, coding, distortion, probability)
+      data.csv_writer(filename,statistics)
 
-      print_statistics(statistics)
+      print_statistics(data.csv_reader(filename))
 
       print("Printing processed packets:")
 
