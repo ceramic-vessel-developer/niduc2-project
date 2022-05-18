@@ -58,7 +58,7 @@ def process_packets(packets, coding, distortion, probability):
 
         if error:
             statistics['wrong'] += 1
-        else:
+        elif not not_found:
             statistics['first_time_good'] += 1
 
         if not_found:

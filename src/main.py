@@ -1,4 +1,5 @@
 import random
+import os
 
 from src import processor
 from src import data
@@ -61,12 +62,7 @@ def print_statistics(statistics):
   print(f"Repeated more times: ", statistics['repeated'][0][4], end='\n\n')
 
 
-def run():
-  packets = create_packet(generate_data(256), 8)
-
-  print_packets(packets)
-  print('')
-
+def one_sim(packets, probability, num_bits, len_packets):
   processed_packets = []
 
   statistics = {
@@ -80,17 +76,16 @@ def run():
 
   distortions = ['binary_erasure_channel', 'symmetric_binary_channel']
 
-  probability = 0.05
-
   for coding in codings:
     for distortion in distortions:
-      filename=coding+distortion+str(probability)+".csv"
+      filename = coding + '_' + distortion + '_' + str(probability) + '_' + str(num_bits)+'_'+str(len_packets)+".csv"
       print(f'Using algorithm: ', coding)
       print(f'Using channel: ', distortion, end='\n\n')
 
       processed_packets, statistics = processor.process_packets(
         packets, coding, distortion, probability)
-      data.csv_writer(filename,statistics)
+
+      data.csv_writer(filename, statistics)
 
       print_statistics(data.csv_reader(filename))
 
@@ -99,3 +94,33 @@ def run():
       print_processed_packets(packets, processed_packets, coding)
 
       print('')
+
+
+def sims(packets,bit_num,packet_len,probability,parameter):
+  if parameter=="PRO":
+    for prob in probability:
+      for _ in range(100):
+        one_sim(packets,prob,bit_num,packet_len)
+  elif parameter=="PAC":
+    for packet in packet_len:
+      for _ in range(100):
+        one_sim(packets,probability,bit_num,packet)
+  elif parameter=="BIT":
+    for bit in bit_num:
+      for _ in range(100):
+        one_sim(packets, probability, bit, packet_len)
+
+
+def run():
+  parameter="PRO"
+  bit_num=256
+  packet_len=8
+  probability=[0.05,0.1,0.15,0.2]
+  os.mkdir(f'csv_{probability}_{packet_len}_{bit_num}')
+  os.chdir(f'csv_{probability}_{packet_len}_{bit_num}')
+  packets = create_packet(generate_data(bit_num), packet_len)
+  sims(packets,bit_num,packet_len,probability,parameter)
+  print_packets(packets)
+  print('')
+
+
