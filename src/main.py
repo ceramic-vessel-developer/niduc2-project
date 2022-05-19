@@ -78,7 +78,7 @@ def one_sim(packets, probability, num_bits, len_packets):
 
   for coding in codings:
     for distortion in distortions:
-      filename = coding + '_' + distortion + '_' + str(probability) + '_' + str(num_bits)+'_'+str(len_packets)+".csv"
+      filename = coding + '+' + distortion + '+' + str(probability) + '_' + str(num_bits)+'_'+str(len_packets)+".csv"
       print(f'Using algorithm: ', coding)
       print(f'Using channel: ', distortion, end='\n\n')
 
@@ -111,6 +111,22 @@ def sims(packets,bit_num,packet_len,probability,parameter):
         one_sim(packets, probability, bit, packet_len)
 
 
+def analyse_data(bit_num,packet_len,probability,parameter):
+  files=os.listdir()
+  if parameter == "PRO":
+    variations=len(probability)
+    for i in range(0,len(files),variations):
+      data.make_plot_from_csv(files[i:i+variations],0)
+  elif parameter=="PAC":
+    variations = len(packet_len)
+    for i in range(0, len(files), variations):
+      data.make_plot_from_csv(files[i:i + variations], 0)
+  elif parameter=="BIT":
+    variations = len(bit_num)
+    for i in range(0, len(files), variations):
+      data.make_plot_from_csv(files[i:i + variations], 0)
+
+
 def run():
   parameter="PRO"
   bit_num=256
@@ -120,6 +136,7 @@ def run():
   os.chdir(f'csv_{probability}_{packet_len}_{bit_num}')
   packets = create_packet(generate_data(bit_num), packet_len)
   sims(packets,bit_num,packet_len,probability,parameter)
+  analyse_data(bit_num,packet_len,probability,parameter)
   print_packets(packets)
   print('')
 
