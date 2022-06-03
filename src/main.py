@@ -113,6 +113,9 @@ def sims(packets,bit_num,packet_len,probability,parameter):
 
 def analyse_data(bit_num,packet_len,probability,parameter):
   files=os.listdir()
+
+  files.sort()
+
   if parameter == "PRO":
     variations=len(probability)
     for i in range(0,len(files),variations):
