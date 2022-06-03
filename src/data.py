@@ -35,11 +35,13 @@ def make_plot_from_csv(files,parameter):
     'not_found':0
   }
     n=float(file.split('+')[2].split('_')[parameter])
+    print(file, n)
     open_file=csv_reader(file)
     open_file.pop('repeated')
     for key,value in open_file.items():
       record[key]=np.average(value)
     data.append((n,record))
+  print(data)
   data.sort()
   x_axis = [x[0] for x in data]
   y_axis_ftg=[x[1]['first_time_good'] for x in data]
