@@ -132,6 +132,7 @@ def analyse_data(bit_num, packet_len, probability, parameter):
 
     for i in range(0, len(files), variations):
         data.make_plot_from_csv(files[i:i + variations], 0)
+        data.make_histogram(files[i:i + variations], 0)
 
 
 def run():
