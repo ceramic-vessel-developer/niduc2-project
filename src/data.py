@@ -78,3 +78,31 @@ def make_plot_from_csv(files, parameter):
     plt.title(name)
     plt.legend()
     plt.show()
+
+
+def make_histogram(files, parameter):
+    data = []
+    name = files[0].split('+')[0]+files[0].split('+')[1]
+
+    for file in files:
+        record = {
+            'first_time_good': 0,
+            'wrong': 0,
+            'not_found': 0
+        }
+
+        n = float(file.split('+')[2].split('_')[parameter])
+
+        print(file, n)
+
+        open_file = csv_reader(file)
+        open_file.pop('repeated')
+
+        for key, value in open_file.items():
+            record[key] = np.average(value)
+
+        data.append((n, record))
+
+    print(data)
+
+    data.sort()

@@ -125,21 +125,13 @@ def analyse_data(bit_num, packet_len, probability, parameter):
 
     if parameter == 'PRO':
         variations = len(probability)
-
-        for i in range(0, len(files), variations):
-            data.make_plot_from_csv(files[i:i+variations], 0)
-
     elif parameter == 'PAC':
         variations = len(packet_len)
-
-        for i in range(0, len(files), variations):
-            data.make_plot_from_csv(files[i:i + variations], 0)
-
     elif parameter == 'BIT':
         variations = len(bit_num)
 
-        for i in range(0, len(files), variations):
-            data.make_plot_from_csv(files[i:i + variations], 0)
+    for i in range(0, len(files), variations):
+        data.make_plot_from_csv(files[i:i + variations], 0)
 
 
 def run():
