@@ -3,6 +3,7 @@ import random
 
 from src import data, processor
 
+# BER dodaj
 
 def generate_data(count):
     data = []
@@ -71,6 +72,7 @@ def one_sim(packets, probability, num_bits, len_packets):
         'first_time_good': 0,
         'wrong': 0,
         'not_found': 0,
+        'corrected':0,
         'repeated': [0, 0, 0, 0, 0]
     }
 
@@ -84,38 +86,44 @@ def one_sim(packets, probability, num_bits, len_packets):
                 str(probability) + '_' + str(num_bits) + \
                 '_' + str(len_packets) + '.csv'
 
-            print(f'Using algorithm: ', coding)
-            print(f'Using channel: ', distortion, end='\n\n')
+            # print(f'Using algorithm: ', coding)
+            # print(f'Using channel: ', distortion, end='\n\n')
 
             processed_packets, statistics = processor.process_packets(
                 packets, coding, distortion, probability)
 
             data.csv_writer(filename, statistics)
 
-            print_statistics(data.csv_reader(filename))
+            # print_statistics(data.csv_reader(filename))
+            #
+            # print('Printing processed packets:')
+            #
+            # print_processed_packets(packets, processed_packets, coding)
+            #
+            # print('')
 
-            print('Printing processed packets:')
 
-            print_processed_packets(packets, processed_packets, coding)
-
-            print('')
-
-
-def sims(packets, bit_num, packet_len, probability, parameter):
+def sims(bit_num, packet_len, probability, parameter):
     if parameter == 'PRO':
+        packets = create_packet(generate_data(bit_num), packet_len)
         for prob in probability:
-            for _ in range(100):
+            for i in range(5000):
                 one_sim(packets, prob, bit_num, packet_len)
+                print(i)
 
     elif parameter == 'PAC':
         for packet in packet_len:
-            for _ in range(100):
+            packets = create_packet(generate_data(bit_num), packet)
+            for i in range(5000):
                 one_sim(packets, probability, bit_num, packet)
+                print(i)
 
     elif parameter == 'BIT':
         for bit in bit_num:
-            for _ in range(100):
+            packets = create_packet(generate_data(bit), packet_len)
+            for i in range(5000):
                 one_sim(packets, probability, bit, packet_len)
+                print(i)
 
 
 def analyse_data(bit_num, packet_len, probability, parameter):
@@ -132,22 +140,22 @@ def analyse_data(bit_num, packet_len, probability, parameter):
 
     for i in range(0, len(files), variations):
         data.make_plot_from_csv(files[i:i + variations], 0)
-        data.make_histogram(files[i:i + variations], 0)
+        #data.make_histogram(files[i:i + variations], 2)
 
 
 def run():
     parameter = 'PRO'
-    bit_num = 256
+    bit_num = 512
     packet_len = 8
-    probability = [0.05, 0.1, 0.15, 0.2]
+    probability = [0.05,0.1,0.15,0.2]
 
     os.mkdir(f'csv_{probability}_{packet_len}_{bit_num}')
     os.chdir(f'csv_{probability}_{packet_len}_{bit_num}')
 
-    packets = create_packet(generate_data(bit_num), packet_len)
+    #packets = create_packet(generate_data(bit_num), packet_len)
 
-    sims(packets, bit_num, packet_len, probability, parameter)
+    sims(bit_num,packet_len, probability, parameter)
     analyse_data(bit_num, packet_len, probability, parameter)
 
-    print_packets(packets)
+    #print_packets(packets)
     print('')

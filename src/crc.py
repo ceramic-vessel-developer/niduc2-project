@@ -33,6 +33,7 @@ def crc_encoder(packet, n):
 
 
 def crc_decoder(packet, n):
+  try:
     divisor = get_divisor(n)
 
     packet_length = len(packet)
@@ -48,13 +49,15 @@ def crc_decoder(packet, n):
                             j] = int(np.logical_xor(temp_packet[i + j], divisor[j]))
 
     sum = 0
-
     for i in range(divisor_length):
         sum += temp_packet[packet_length - 1 - i]
 
     if sum == 0:
         return packet[:-(divisor_length - 1)], 'R'
-    elif sum == 1:
+    elif sum >= 1:
         return packet[:-(divisor_length - 1)], 'F'
-    else:
-        return [], 'R'
+  except:
+    return [], 'F'
+
+    # else:
+    #     return [], 'R'
